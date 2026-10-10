@@ -1,0 +1,22 @@
+{
+ "name": "SG Mech Keebs GB",
+ "type": "public_supergroup",
+ "id": 9000000001,
+ "messages": [
+  {"id": 1, "type": "message", "date": "2026-10-12T19:00:00", "from": "drey (GB host)", "from_id": "user1", "text": "GB for Kopi Peng keycap sampler (3 keys) 🧋 MOQ 15 packs. 15+ packs $6.90, 25+ packs $5.90. Variants: Base or Base+Novelties (same price). Closes Wed 7pm."},
+  {"id": 2, "type": "message", "date": "2026-10-12T19:02:11", "from": "kai", "from_id": "user2", "text": "in for 1 base"},
+  {"id": 3, "type": "message", "date": "2026-10-12T19:02:40", "from": "Nurul", "from_id": "user3", "text": "+1 base+novelties"},
+  {"id": 4, "type": "message", "date": "2026-10-12T19:05:09", "from": "marcus.l", "from_id": "user4", "text": "2 packs base. one for my bro"},
+  {"id": 5, "type": "message", "date": "2026-10-12T19:10:00", "from": "zh", "from_id": "user5", "text": "will the legends be doubleshot?"},
+  {"id": 6, "type": "message", "date": "2026-10-12T19:11:30", "from": "drey (GB host)", "from_id": "user1", "text": "yes doubleshot ABS"},
+  {"id": 7, "type": "message", "date": "2026-10-12T19:12:02", "from": "zh", "from_id": "user5", "text": "ok im in, 1 base+novelties"},
+  {"id": 8, "type": "message", "date": "2026-10-12T19:30:45", "from": "Bryan", "from_id": "user6", "text": [{"type": "bold", "text": "3"}, " base please"]},
+  {"id": 9, "type": "message", "date": "2026-10-12T20:01:00", "from": "kai", "from_id": "user2", "text": "+1 more base"},
+  {"id": 10, "type": "message", "date": "2026-10-12T20:15:13", "from": "Esther", "from_id": "user7", "text": "thinking about it... maybe 1"},
+  {"id": 11, "type": "message", "date": "2026-10-12T21:00:00", "from": "Nurul", "from_id": "user3", "text": "switch mine to base pls"},
+  {"id": 12, "type": "message", "date": "2026-10-12T21:30:00", "from": "Haris", "from_id": "user8", "text": "same as Bryan"},
+  {"id": 13, "type": "service", "date": "2026-10-12T21:31:00", "actor": "Lim", "actor_id": "user9", "action": "join_group_by_link"},
+  {"id": 14, "type": "message", "date": "2026-10-12T22:00:00", "from": "marcus.l", "from_id": "user4", "text": "bro pulled out, just 1 for me"},
+  {"id": 15, "type": "message", "date": "2026-10-12T22:05:00", "from": "Lim", "from_id": "user9", "text": "2 base+novelties"}
+ ]
+}

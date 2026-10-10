@@ -1,0 +1,258 @@
+{
+ "durian_tampines_whatsapp_android.txt": {
+  "ctx": {
+   "organiser": "Auntie Lin",
+   "variants": [
+    "MSW",
+    "D24"
+   ],
+   "aliases": {
+    "msw": "MSW",
+    "mao shan wang": "MSW",
+    "d24": "D24"
+   }
+  },
+  "campaign": {
+   "item": "Durian puffs (box of 6)",
+   "moq": 20,
+   "tiers": [
+    [
+     20,
+     "4.80"
+    ],
+    [
+     30,
+     "4.20"
+    ],
+    [
+     40,
+     "3.60"
+    ]
+   ],
+   "hours": 48
+  },
+  "rows": [
+   [
+    "Ah Seng Blk 512",
+    "MSW",
+    2
+   ],
+   [
+    "Daniel Koh",
+    "MSW",
+    4
+   ],
+   [
+    "Hui Min",
+    "D24",
+    1
+   ],
+   [
+    "Hui Min",
+    "MSW",
+    2
+   ],
+   [
+    "Jason Tan",
+    "MSW",
+    3
+   ],
+   [
+    "Kelvin",
+    "MSW",
+    2
+   ],
+   [
+    "Mdm Rokiah",
+    "D24",
+    1
+   ],
+   [
+    "Uncle Boon",
+    "MSW",
+    2
+   ]
+  ],
+  "total": 17,
+  "issues": [
+   [
+    "ON_BEHALF",
+    "Uncle Boon"
+   ],
+   [
+    "MAYBE",
+    "Wei Ling"
+   ]
+  ],
+  "story": "Priya cancelled, Kelvin copied Jason then minus 1, Ah Seng changed 1->2. 3 short of MOQ 20 boxes; Wei Ling's maybe-2 would nearly close the gap."
+ },
+ "keycaps_telegram_export.json": {
+  "ctx": {
+   "organiser": "drey",
+   "variants": [
+    "base",
+    "base+novelties"
+   ],
+   "aliases": {
+    "base + novelties": "base+novelties"
+   }
+  },
+  "campaign": {
+   "item": "Kopi Peng keycap sampler (3 keys)",
+   "moq": 15,
+   "tiers": [
+    [
+     15,
+     "6.90"
+    ],
+    [
+     25,
+     "5.90"
+    ]
+   ],
+   "hours": 48
+  },
+  "rows": [
+   [
+    "Bryan",
+    "base",
+    3
+   ],
+   [
+    "Haris",
+    "base",
+    3
+   ],
+   [
+    "Lim",
+    "base+novelties",
+    2
+   ],
+   [
+    "Nurul",
+    "base",
+    1
+   ],
+   [
+    "kai",
+    "base",
+    2
+   ],
+   [
+    "marcus.l",
+    "base",
+    1
+   ],
+   [
+    "zh",
+    "base+novelties",
+    1
+   ]
+  ],
+  "total": 13,
+  "issues": [
+   [
+    "MAYBE",
+    "Esther"
+   ]
+  ],
+  "story": "Nurul switches variant, marcus 2->1 (bro pulled out is not a cancel), Haris copies Bryan. 2 short of MOQ 15."
+ },
+ "house_socks_whatsapp_ios.txt": {
+  "ctx": {
+   "organiser": "Ms Goh",
+   "variants": [
+    "XS",
+    "S",
+    "M",
+    "L",
+    "XL"
+   ],
+   "aliases": {}
+  },
+  "campaign": {
+   "item": "House-colour sports socks (pair)",
+   "moq": 20,
+   "tiers": [
+    [
+     20,
+     "2.50"
+    ],
+    [
+     30,
+     "2.20"
+    ],
+    [
+     50,
+     "1.90"
+    ]
+   ],
+   "hours": 60
+  },
+  "rows": [
+   [
+    "Ahmad",
+    "M",
+    5
+   ],
+   [
+    "Benjamin",
+    "L",
+    2
+   ],
+   [
+    "Clara",
+    "XS",
+    3
+   ],
+   [
+    "Farah (Aisyah's mum)",
+    "M",
+    3
+   ],
+   [
+    "Grace",
+    "M",
+    4
+   ],
+   [
+    "Jenny Lim",
+    "L",
+    2
+   ],
+   [
+    "Mr Wong",
+    "XL",
+    2
+   ],
+   [
+    "Mrs Chan",
+    "L",
+    4
+   ],
+   [
+    "Ravi P",
+    "S",
+    1
+   ],
+   [
+    "Siti",
+    "S",
+    2
+   ],
+   [
+    "Siti",
+    "XS",
+    2
+   ]
+  ],
+  "total": 30,
+  "issues": [
+   [
+    "ON_BEHALF",
+    "Mrs Chan"
+   ]
+  ],
+  "story": "Tips at 30 pairs after Farah 2->3, Jenny 3->2, Ravi cancels M keeps S. Crosses MOQ 20 and reaches the 30+ tier, so every hold placed at $2.50/pair is captured at $2.20."
+ }
+}

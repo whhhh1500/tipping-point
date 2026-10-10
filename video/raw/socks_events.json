@@ -1,0 +1,128 @@
+[
+ {
+  "t": 3.0,
+  "event": "empty"
+ },
+ {
+  "t": 4.04,
+  "event": "sample_click"
+ },
+ {
+  "t": 7.55,
+  "event": "read_click"
+ },
+ {
+  "t": 11.86,
+  "event": "read_done"
+ },
+ {
+  "t": 15.86,
+  "event": "holds_click"
+ },
+ {
+  "t": 21.43,
+  "event": "holds_done"
+ },
+ {
+  "t": 24.51,
+  "event": "buyer_view_start",
+  "attempt": 0
+ },
+ {
+  "t": 68.75,
+  "event": "buyer_view_returned"
+ },
+ {
+  "t": 72.79,
+  "event": "buyer_view_end",
+  "ok": true
+ },
+ {
+  "t": 75.79,
+  "event": "buyers_start"
+ },
+ {
+  "t": 77.79,
+  "event": "held",
+  "held": 5,
+  "tipped": false
+ },
+ {
+  "t": 85.98,
+  "event": "held",
+  "held": 7,
+  "tipped": false
+ },
+ {
+  "t": 103.24,
+  "event": "held",
+  "held": 10,
+  "tipped": false
+ },
+ {
+  "t": 145.05,
+  "event": "held",
+  "held": 13,
+  "tipped": false
+ },
+ {
+  "t": 187.49,
+  "event": "held",
+  "held": 17,
+  "tipped": false
+ },
+ {
+  "t": 229.33,
+  "event": "held",
+  "held": 19,
+  "tipped": false
+ },
+ {
+  "t": 272.09,
+  "event": "held",
+  "held": 21,
+  "tipped": true
+ },
+ {
+  "t": 314.84,
+  "event": "held",
+  "held": 25,
+  "tipped": true
+ },
+ {
+  "t": 356.99,
+  "event": "held",
+  "held": 26,
+  "tipped": true
+ },
+ {
+  "t": 400.63,
+  "event": "held",
+  "held": 30,
+  "tipped": true
+ },
+ {
+  "t": 427.61,
+  "event": "buyers_done"
+ },
+ {
+  "t": 431.61,
+  "event": "close_click"
+ },
+ {
+  "t": 431.87,
+  "event": "plan_shown"
+ },
+ {
+  "t": 440.71,
+  "event": "approve_click"
+ },
+ {
+  "t": 454.64,
+  "event": "settled"
+ },
+ {
+  "t": 462.64,
+  "event": "end"
+ }
+]

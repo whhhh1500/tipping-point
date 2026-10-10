@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.env
+spikes/out/*.png
+spikes/out/
+shots/
+video/raw/*.mp4
+video/build/
+video/*.mp4

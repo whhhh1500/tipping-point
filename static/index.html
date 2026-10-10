@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tipping Point: nobody pays unless the group tips</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%23fff' stroke='%230f766e' stroke-width='3'/><path d='M16 16 L16 2 A14 14 0 0 1 30 16 Z' fill='%230f766e'/></svg>">
+<link rel="stylesheet" href="/static/vendor/ag-grid.css">
+<link rel="stylesheet" href="/static/vendor/ag-theme-quartz.css">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <div class="brand"><span class="logo">◔</span> Tipping Point <span class="tag">Group buys where nobody pays unless the group hits the minimum</span></div>
+  <div class="badges"><span id="conn" class="badge bad hidden">reconnecting…</span><span id="mode" class="badge"></span><span id="reader" class="badge"></span></div>
+</header>
+
+<ol id="steps">
+  <li>Paste chat</li><li>Read the orders</li><li>Send hold links</li><li>Buyers hold</li><li>Close</li><li>Capture or release</li>
+</ol>
+
+<main>
+  <section id="chatcol" class="card">
+    <div class="cardhead"><span>Group chat</span>
+      <span class="samples">Try a sample:
+        <button data-sample="socks">House socks</button><button data-sample="durian">Durian puffs</button><button data-sample="keycaps">Keycaps</button>
+      </span></div>
+    <textarea id="paste" placeholder="Paste a WhatsApp or Telegram group-buy chat export here, or pick a sample above.&#10;&#10;Example:&#10;10/10/26, 20:01 - Auntie Lin: Durian puffs, need 20 boxes…&#10;10/10/26, 20:04 - Jason Tan: 2 MSW&#10;10/10/26, 20:06 - Mdm Rokiah: 1 D24 pls"></textarea>
+    <details id="settings">
+      <summary>Campaign settings <span id="settingsSummary"></span></summary>
+      <div class="form">
+        <label>Item<input id="cfgItem" placeholder="Durian puffs (box of 6)"></label>
+        <label>Minimum<input id="cfgMoq" type="number" min="1" placeholder="20"></label>
+        <label class="wide">Price tiers <small>quantity @ unit price</small><input id="cfgTiers" placeholder="20 @ 4.80, 30 @ 4.20, 40 @ 3.60"></label>
+        <label>Options<input id="cfgVariants" placeholder="MSW, D24"></label>
+        <label>Organiser<input id="cfgOrganiser" placeholder="Auntie Lin"></label>
+      </div>
+    </details>
+    <div id="bubbles" class="hidden"></div>
+    <form id="addmsg" class="hidden"><input id="addtext" placeholder="Late message, e.g.  Grace: make mine 6"><button>Add</button></form>
+    <div class="actions" id="readrow"><button id="btnRead" class="primary" disabled>Read the chat</button></div>
+  </section>
+
+  <section id="centercol">
+    <div class="card" id="campaign">
+      <div id="intro">
+        <h2>Group buys where nobody pays unless the group hits the minimum</h2>
+        <ol>
+          <li><b>Paste the group chat.</b> Tipping Point turns “+1”, “cancel mine”, “same as Jason” into a clean order list.</li>
+          <li><b>Everyone gets a PayPal hold, not a charge,</b> at the highest tier price.</li>
+          <li><b>Minimum reached?</b> Each hold is captured at the final group price, which can only go down. <b>Missed?</b> Every hold is released. Nobody pays, nothing to refund.</li>
+        </ol>
+        <p class="muted">Pick a sample chat on the left to see it run.</p>
+      </div>
+      <div id="campaignBody" class="hidden">
+        <div class="cardhead"><span id="item"></span><span id="deadline"></span></div>
+        <div id="bigline"><span id="bignum">0</span><span id="bigof"></span><span id="bigpill" class="pill"></span></div>
+        <div id="bar"><div id="fillCommitted"></div><div id="fillHeld"></div><div id="markers"></div></div>
+        <div id="barlegend"><span class="lg held"></span>held with PayPal <span class="lg committed"></span>said yes in chat, not held yet</div>
+        <div id="result" class="result hidden"></div>
+      </div>
+    </div>
+    <div class="card gridcard">
+      <div class="cardhead"><span>Order list</span>
+        <span class="actions inline">
+          <button id="btnHolds" disabled>Send hold links</button>
+          <button id="btnBuyers" disabled title="Sandbox demo: plays each buyer through PayPal's real approval page">▶ Play buyers (sandbox)</button>
+          <button id="btnClose" disabled>Close campaign</button>
+        </span></div>
+      <div id="grid" class="ag-theme-quartz"></div>
+    </div>
+  </section>
+
+  <section id="rightcol">
+    <div class="card" id="issuescard"><div class="cardhead"><span>Needs attention</span><span id="issuecount" class="count hidden"></span></div>
+      <div id="issues"><div class="empty">Unclear messages (maybes, questions, orders placed for someone else) show up here with a reply drafted for you.</div></div></div>
+    <div class="card" id="feedcard"><div class="cardhead"><span id="feedtitle">PayPal activity</span><span class="live">● live</span></div>
+      <div id="progress" class="hidden"></div>
+      <div id="feed"><div class="empty">Every PayPal API call appears here as it happens.</div></div></div>
+  </section>
+</main>
+
+<div id="settle" class="modal hidden">
+  <div class="modalbox">
+    <div id="settleHead"></div>
+    <div id="settleErrors" class="hidden"></div>
+    <div id="settleActions"></div>
+    <div class="actions"><button id="btnCancelSettle">Back</button><button id="btnApprove" class="primary">Approve &amp; execute</button></div>
+    <div id="hashline"></div>
+  </div>
+</div>
+<div id="toasts"></div>
+
+<script src="/static/vendor/ag-grid-community.min.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
