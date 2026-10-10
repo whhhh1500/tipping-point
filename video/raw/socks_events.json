@@ -4,125 +4,134 @@
   "event": "empty"
  },
  {
-  "t": 4.04,
+  "t": 4.03,
   "event": "sample_click"
  },
  {
-  "t": 7.55,
+  "t": 7.52,
   "event": "read_click"
  },
  {
-  "t": 11.86,
+  "t": 28.32,
+  "event": "bubbles_start"
+ },
+ {
+  "t": 32.62,
   "event": "read_done"
  },
  {
-  "t": 15.86,
+  "t": 32.63,
+  "event": "reader_used",
+  "reader": "gemini"
+ },
+ {
+  "t": 36.62,
   "event": "holds_click"
  },
  {
-  "t": 21.43,
+  "t": 43.96,
   "event": "holds_done"
  },
  {
-  "t": 24.51,
+  "t": 47.03,
   "event": "buyer_view_start",
   "attempt": 0
  },
  {
-  "t": 68.75,
+  "t": 91.12,
   "event": "buyer_view_returned"
  },
  {
-  "t": 72.79,
+  "t": 95.16,
   "event": "buyer_view_end",
   "ok": true
  },
  {
-  "t": 75.79,
+  "t": 98.16,
   "event": "buyers_start"
  },
  {
-  "t": 77.79,
+  "t": 100.4,
   "event": "held",
   "held": 5,
   "tipped": false
  },
  {
-  "t": 85.98,
+  "t": 107.67,
   "event": "held",
   "held": 7,
   "tipped": false
  },
  {
-  "t": 103.24,
+  "t": 124.02,
   "event": "held",
   "held": 10,
   "tipped": false
  },
  {
-  "t": 145.05,
+  "t": 166.12,
   "event": "held",
   "held": 13,
   "tipped": false
  },
  {
-  "t": 187.49,
+  "t": 208.5,
   "event": "held",
   "held": 17,
   "tipped": false
  },
  {
-  "t": 229.33,
+  "t": 251.79,
   "event": "held",
   "held": 19,
   "tipped": false
  },
  {
-  "t": 272.09,
+  "t": 293.0,
   "event": "held",
   "held": 21,
   "tipped": true
  },
  {
-  "t": 314.84,
+  "t": 335.44,
   "event": "held",
   "held": 25,
   "tipped": true
  },
  {
-  "t": 356.99,
+  "t": 377.86,
   "event": "held",
   "held": 26,
   "tipped": true
  },
  {
-  "t": 400.63,
+  "t": 419.71,
   "event": "held",
   "held": 30,
   "tipped": true
  },
  {
-  "t": 427.61,
+  "t": 447.58,
   "event": "buyers_done"
  },
  {
-  "t": 431.61,
+  "t": 451.61,
   "event": "close_click"
  },
  {
-  "t": 431.87,
+  "t": 451.86,
   "event": "plan_shown"
  },
  {
-  "t": 440.71,
+  "t": 460.71,
   "event": "approve_click"
  },
  {
-  "t": 454.64,
+  "t": 475.39,
   "event": "settled"
  },
  {
-  "t": 462.64,
+  "t": 483.39,
   "event": "end"
  }
 ]

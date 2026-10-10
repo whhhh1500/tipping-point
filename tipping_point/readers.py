@@ -250,7 +250,8 @@ class GeminiReader:
         self.api_key = api_key or os.environ.get("GEMINI_API_KEY")
         if not self.api_key:
             raise RuntimeError("GEMINI_API_KEY not set")
-        self.model = model or os.environ.get("GEMINI_MODEL", "gemini-3.5-flash")  # 2.5-flash is closed to new keys
+        self.model = model or os.environ.get("GEMINI_MODEL", "gemini-3.7-flash,gemini-3.5-flash")  # comma list: next model on 429/503
+        self.models = [m.strip() for m in self.model.split(",") if m.strip()]
         self.client = client or httpx.Client(timeout=60)
         self.base_url = base_url
 
@@ -259,12 +260,17 @@ class GeminiReader:
         prompt = _PROMPT.format(variants=", ".join(ctx.variants) or "(none)", organiser=ctx.organiser, messages=lines)
         body = {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
                 "generationConfig": {"temperature": 0, "responseMimeType": "application/json", "responseSchema": _SCHEMA}}
-        for attempt in range(3):            # 429/503 ("high demand") are common on the free tier: brief backoff
-            r = self.client.post(f"{self.base_url}/models/{self.model}:generateContent",
-                                 headers={"x-goog-api-key": self.api_key}, json=body)
-            if r.status_code not in (429, 500, 503) or attempt == 2:
+        # free tier: 429 (quota) and 503 (high demand) are common, so back off briefly, then try the next model
+        for model in self.models:
+            for attempt in range(2):
+                r = self.client.post(f"{self.base_url}/models/{model}:generateContent",
+                                     headers={"x-goog-api-key": self.api_key}, json=body)
+                if r.status_code not in (429, 500, 503):
+                    break
+                time.sleep(2)
+            if r.status_code not in (429, 500, 503):
+                self.last_model = model
                 break
-            time.sleep(2 * (attempt + 1))
         r.raise_for_status()
         text = r.json()["candidates"][0]["content"]["parts"][0]["text"]
         events = [CommitmentEvent(**e) for e in json.loads(text)]

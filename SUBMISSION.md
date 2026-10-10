@@ -1,6 +1,6 @@
 # Devpost submission text (draft, not submitted)
 
-> Lines marked **[[CHECK]]** depend on something not yet done (the Gemini key, the public repo, the video URL). Fix or remove them before submitting.
+> One line is still marked **[[CHECK]]**: the YouTube URL, which exists only once the video is uploaded. Fill it in before submitting.
 > Nothing here states where the builder lives. The product is set in Singapore because that is where this style of chat group buy is everywhere.
 
 ## Name
@@ -35,16 +35,17 @@ All of this is real PayPal REST API calls against the **sandbox**:
 We first confirmed in the sandbox that a capture below the authorized amount works and that voids stop later captures. Only then did we write the product.
 
 ## How we built it: AI
-**[[CHECK: true only once the Gemini reader has been run against the fixtures. Otherwise rewrite this section.]]**
-- The chat reader is an LLM (**Google Gemini** through the `generateContent` API, with a strict JSON response schema). It turns free-form multi-person chat into typed `CommitmentEvent`s. This is the part rules cannot do well: "the M one cancel, S keep", "add 4 L for Mrs Chan, she messaged me privately", "bro pulled out, just 1 for me".
+- The chat reader is an LLM (**Google Gemini**, `gemini-3.7-flash` with `gemini-3.5-flash` as a second choice, through the `generateContent` API with a strict JSON response schema). It turns free-form multi-person chat into typed `CommitmentEvent`s. This is the part rules cannot do well: "the M one cancel, S keep", "add 4 L for Mrs Chan, she messaged me privately", "bro pulled out, just 1 for me".
 - **Every AI answer is checked against the chat before it can affect money.** Each event must cite a real message ID. The participant must be that message's sender, unless the sender explicitly ordered for a named person. The variant must be one the organiser listed, and quantities must be positive. An answer that fails is rejected, and the app falls back to a deterministic rules reader, with a visible notice.
 - The AI never moves money. Its output becomes an order list. A pure, tested rules engine (minimum, tiers, holds) turns that list into a settlement plan, and a human approves the exact plan.
 - The reader sits behind a provider interface, so tests run on a deterministic offline reader with the same grounding.
+- **How well it does:** on our three invented chats, every Gemini read that completed produced exactly the hand-checked order list and the same flags (`spikes/gemini_check.py`: 7 of 7 completed reads across both models). The socks read filmed for the video gave the same 30-pair list and flag on screen. Many other requests never completed (429, 503 or a timeout), and those fell back to the rules reader. The UI shows which reader produced each order list ("Read by Gemini").
 
 ## Challenges we ran into
 - **Proving partial capture first.** The whole idea depends on capturing *less* than was authorized. We tested it end to end in the sandbox (hold → lower `final_capture` → remainder released; hold → void → capture refused) before writing product code. We also learned that reauthorizing inside the honor period fails (`REAUTHORIZATION_TOO_SOON`), so the campaign window is capped below 72 hours.
 - **Top-ups.** When someone raises their order after holding, the existing authorization can't grow. A second hold covers just the difference, and settlement splits each buyer's capture across their authorizations.
 - **Messy chat semantics.** Is "+1" one more unit or a new order of one? Is "make it 2" a set or an add? Is an order "for my mum" an order for someone else? We pinned these down as explicit event types with tests across three invented chats (WhatsApp Android, WhatsApp iOS, Telegram JSON).
+- **Free-tier model limits.** Our first model choice was closed to new API keys, and the free tier often answers with 429 (quota), 503 (high demand) or not at all within 60 s. The reader backs off, tries a second model, and then falls back to the rules reader with a visible notice rather than stalling the demo. In one test a lighter model invented an order for the wrong person. The grounding check rejected that answer, which is exactly what it is for.
 - **Failure handling.** If one capture fails halfway through settlement, the campaign stays open and shows which call failed. Retrying is safe because the same request IDs are reused.
 
 ## Accomplishments we're proud of
@@ -58,18 +59,18 @@ Authorization holds are an under-used PayPal primitive for *conditional* commerc
 Hosted version with live webhooks; organiser-side sharing of hold links back into the chat; per-variant minimums; reminders before the deadline.
 
 ## Built with
-Python, FastAPI, httpx, Pydantic, pytest, Playwright (demo buyer automation and tests), AG Grid Community, PayPal REST APIs (Orders v2, Payments v2, Webhooks), Google Gemini API **[[CHECK]]**.
+Python, FastAPI, httpx, Pydantic, pytest, Playwright (demo buyer automation and tests), AG Grid Community, PayPal REST APIs (Orders v2, Payments v2, Webhooks), Google Gemini API (`gemini-3.7-flash`, `gemini-3.5-flash`).
 
 ## AI tools used to build this project (disclosure)
 > **[[REWRITE IN YOUR OWN VOICE]]** This is a draft written for you. Keep it honest, but put it in your own words before submitting.
 
 I set the direction for Tipping Point. I chose the problem and the product, decided what it should and shouldn't do, and made the calls on scope, design and what to cut. An AI agent, **Grok Bot**, wrote most of the code, tests, sample chats and documentation under that direction. It also ran the PayPal sandbox experiments and the automated demo buyers. I reviewed its work and steered it throughout.
 
-- **[[CHECK]]** Google Gemini is used *at runtime* as the chat reader. Keep this line only once the Gemini reader has actually run.
+- Separately from how it was built, Google Gemini is used *at runtime* inside the product, as the chat reader described above.
 - The sample chats are invented. No real people's messages were used.
 
 ## Testing instructions (for judges)
-- Repo: **[[CHECK: public GitHub URL]]**. MIT licence (`LICENSE`).
+- Repo: https://github.com/whhhh1500/tipping-point (MIT licence, `LICENSE`).
 - Offline, no accounts needed: `pip install -r requirements.txt && uvicorn tipping_point.web:app`. Open http://127.0.0.1:8000 and pick a sample chat. PayPal is simulated in-process.
 - Sandbox: put your own sandbox REST app credentials in an env file and run with `PAYPAL_MODE=sandbox`. Buyers can approve as PayPal guests with the sandbox test card 4111 1111 1111 1111, any future expiry, CVV 123.
 - Video: **[[CHECK: YouTube URL]]**

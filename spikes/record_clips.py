@@ -81,7 +81,12 @@ with sync_playwright() as p:
     sample = {"socks": "socks", "durian": "durian"}[act]
     glide_click(page, f"[data-sample={sample}]"); log("sample_click"); time.sleep(2.5)
     glide_click(page, "#btnRead"); log("read_click")
-    wait_js(page, "!document.querySelector('#btnHolds').disabled"); log("read_done"); time.sleep(3)
+    wait_js(page, "!document.querySelector('#bubbles').classList.contains('hidden')", 180); log("bubbles_start")
+    wait_js(page, "!document.querySelector('#btnHolds').disabled"); log("read_done")
+    used = page.evaluate("view.reader_used"); log("reader_used", reader=used)
+    if os.environ.get("REQUIRE_READER") and used != os.environ["REQUIRE_READER"]:
+        print("ABORT: reader was", used); rec.communicate(b"q", timeout=60); b.close(); xvfb.terminate(); sys.exit(3)
+    time.sleep(3)
     glide_click(page, "#btnHolds"); log("holds_click")
     wait_js(page, "view && view.rows.every(r => r.status === 'AWAITING BUYER')"); log("holds_done"); time.sleep(3)
     if act == "socks":

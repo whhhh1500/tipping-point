@@ -30,7 +30,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python -m pytest -q                       # offline (stub reader, fake PayPal)
 RUN_SANDBOX_TESTS=1 .venv/bin/python -m pytest -q -m sandbox   # real sandbox, tiny TEST holds
 GEMINI_API_KEY=... .venv/bin/python spikes/gemini_check.py   # Gemini reader vs the 3 fixtures (3 requests)
-TP_READER=gemini GEMINI_API_KEY=... uvicorn ...      # app with the Gemini reader (falls back to rules, with a notice)
+TP_READER=gemini GEMINI_API_KEY=... uvicorn ...      # app with the Gemini reader (GEMINI_MODEL, default "gemini-3.7-flash,gemini-3.5-flash"; falls back to rules, with a notice)
 
 # web app, offline simulator (no network)
 .venv/bin/uvicorn tipping_point.web:app --port 8000

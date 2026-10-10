@@ -32,8 +32,12 @@ SEGS = [
   "A school parents’ chat: <b>“+2 L”</b>, <b>“oops make it 2 L only”</b>, <b>“the M one cancel, S keep”</b>… and the supplier ships only at <b>20 pairs</b>.", None, 4.0),
  (S, t(S, "end") - 6.5, t(S, "end") - 0.5, 1, zoom(400, 170, 720),
   "<b>Tipping Point:</b> everyone places a PayPal <b>hold</b>. Group hits 20 → charged the lower group price, rest released. Misses → nobody pays.", None, 1.0),
- (S, t(S, "read_click") - 0.4, t(S, "read_done") + 1.0, 1, FULL,
-  "Paste the chat. Every message becomes an order, a change, a cancel, or a flag.", None, 0),
+ (S, t(S, "read_click") - 0.4, t(S, "read_click") + 2.5, 1, FULL,
+  "Paste the chat. <b>Gemini</b> reads every message.", None, 0),
+ (S, t(S, "read_click") + 2.5, t(S, "bubbles_start") - 0.3, 8, FULL,
+  "<b>Gemini</b> reads every message. <span class=dim>About 20 s on the free tier, sped up</span>", "8×", 0),
+ (S, t(S, "bubbles_start") - 0.3, t(S, "read_done") + 1.0, 1, FULL,
+  "Each message becomes an order, a change, a cancel or a flag, and each one is <b>checked against the chat</b> before it counts.", None, 0),
  (S, t(S, "read_done") + 1.0, t(S, "read_done") + 1.8, 1, zoom(10, 440, 640),
   "<b>“oops make it 2 L only”</b> → 2 L &nbsp;·&nbsp; <b>“the M one cancel, S keep”</b> → cancel M &nbsp;·&nbsp; <b>“add 4 L for Mrs Chan”</b> → ordered on her behalf", None, 2.6),
  (S, t(S, "read_done") + 1.8, t(S, "read_done") + 2.6, 1, zoom(1040, 170, 400),
@@ -47,7 +51,7 @@ SEGS = [
  (S, t(S, "buyer_view_returned"), t(S, "buyer_view_returned") + 3.2, 1, FULL,
   "…then: <b>held, not charged</b>. They pay only if the group hits the minimum.", None, 0.8),
  (S, t(S, "buyers_start") - 0.5, cross["t"] - 3, 16, FULL,
-  "The other 10 buyers approve. <span class=dim>Automated for this demo; real buyers tap their link.</span>", "16×", 0),
+  "The rest of the group approves. <span class=dim>Automated for this demo; real buyers tap their link.</span>", "16×", 0),
  (S, cross["t"] - 3, cross["t"] + 3, 1, zoom(400, 170, 720),
   "<b>Minimum reached.</b> The group tips.", None, 0),
  (S, cross["t"] + 3, tier30["t"] + 2.5, 16, FULL,
@@ -81,8 +85,8 @@ font-family:'Inter','Noto Sans','DejaVu Sans',sans-serif;color:#1d2433"><div sty
 <div style="font-size:96px;font-weight:800;letter-spacing:-2px"><span style="color:#0f766e">◔</span> Tipping Point</div>
 <div style="font-size:40px;margin:14px 0 50px;color:#4b5563">Group buys where nobody pays unless the group hits the minimum</div>
 <div style="font-size:30px;line-height:1.7">PayPal Orders v2 with intent <b>AUTHORIZE</b> · <b>capture below the hold</b> (final_capture) · <b>void</b> · webhooks<br>
-Chat → orders, every event checked against the chat · organiser approves the exact plan<br>
-<span style="color:#6b7280">PayPal Sandbox · test money · github.com/‹repo› · PayPal AI Hackathon</span></div></div></body></html>"""
+Chat → orders by <b>Gemini</b>, every event checked against the chat · organiser approves the exact plan<br>
+<span style="color:#6b7280">PayPal Sandbox · test money · <b style="color:#1d2433">github.com/whhhh1500/tipping-point</b> · PayPal AI Hackathon</span></div></div></body></html>"""
 
 def render_pngs():
     with sync_playwright() as p:

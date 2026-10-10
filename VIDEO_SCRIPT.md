@@ -59,4 +59,7 @@ Grace's row turns **TOP-UP NEEDED** and the button changes to **Send top-up link
 - The sandbox wallet login never appears. It runs in the demo runner's own off-screen browser for one buyer. The only checkout on screen is Ahmad's guest card checkout.
 - Speed-ups are labelled on screen (⏩ 1.5×, 5×, 16×, 2×, 120×, 1.3×). The minimum crossing (19 → 21) plays at real speed.
 - Act B differs from the plan: in the recorded take, one buyer (Ah Seng, 2 boxes) never got held, so the board ends at **15 / 20, missed by 5, SGD 72.00 released**. The captions say exactly that, and it adds a realistic "said yes but never approved" beat.
-- The captions use rules-reader wording ("Every message becomes an order…"). No caption mentions Gemini or AI until the Gemini reader has run.
+- **Update, second pass:** Act A was re-recorded with `TP_READER=gemini`. The recorder refuses a take unless the read was really done by Gemini (`REQUIRE_READER=gemini`), and the badge reads "Read by Gemini". The about-20 s model call is shown at 8× with a label, and the captions now credit Gemini. Act B (durian) is still the earlier take, so its badge reads "Chat reader: rules (offline)". That is honest but inconsistent.
+- The cursor now moves off the Play button, so its tooltip no longer sits on screen during the 16× section.
+- The end card carries the real repo URL, github.com/whhhh1500/tipping-point.
+- Earlier takes are kept as backups: `video/raw/socks_raw_take1.mp4` (tooltip visible) and `socks_raw_rules_take2.mp4` (rules reader).
