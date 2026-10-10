@@ -46,6 +46,11 @@ class GroundingError(ValueError):
     pass
 
 
+def _base_name(name: str) -> str:
+    """Name without a trailing parenthetical, case-folded: only used to match a model's spelling of the SENDER."""
+    return re.sub(r"\s*\(.*?\)\s*$", "", name or "").strip().casefold()
+
+
 def ground(events: list[CommitmentEvent], messages: list[Message], ctx: ReaderContext) -> list[CommitmentEvent]:
     """Drop or reject events that are not supported by the chat. Applied to every reader's output.
 
@@ -61,6 +66,10 @@ def ground(events: list[CommitmentEvent], messages: list[Message], ctx: ReaderCo
         m = by_id.get(e.source_id)
         if m is None:
             raise GroundingError(f"event cites unknown message {e.source_id}")
+        if e.added_by and e.added_by != m.sender and _base_name(e.added_by) == _base_name(m.sender):
+            e = e.model_copy(update={"added_by": m.sender})      # "Auntie Lin" for sender "Auntie Lin (organiser)"
+        if e.participant != m.sender and _base_name(e.participant) == _base_name(m.sender):
+            e = e.model_copy(update={"participant": m.sender})
         if e.participant != m.sender and e.added_by != m.sender:
             raise GroundingError(f"message {e.source_id} from {m.sender!r} cannot create an order for {e.participant!r}")
         if e.variant is not None and variants and e.variant not in variants:
@@ -236,7 +245,7 @@ Rules: participant is the sender, except when the organiser (or anyone) orders f
 then participant is that person and added_by is the sender. "for my mum/bro" WITHOUT a name stays the sender.
 Use only these variants (canonical spelling): {variants}. If no variant is stated, leave variant null.
 Ignore the organiser's announcements and answers. Ignore chatter. Never invent quantities.
-source_id must be the [id] of the message the event came from.
+source_id must be the [id] of the message the event came from. Copy sender names exactly as written, including any "(…)".
 Organiser: {organiser}
 Messages:
 {messages}"""
@@ -252,7 +261,7 @@ class GeminiReader:
             raise RuntimeError("GEMINI_API_KEY not set")
         self.model = model or os.environ.get("GEMINI_MODEL", "gemini-3.7-flash,gemini-3.5-flash")  # comma list: next model on 429/503
         self.models = [m.strip() for m in self.model.split(",") if m.strip()]
-        self.client = client or httpx.Client(timeout=60)
+        self.client = client or httpx.Client(timeout=120)   # long chats can take over a minute on the free tier
         self.base_url = base_url
 
     def extract(self, messages: list[Message], ctx: ReaderContext) -> list[CommitmentEvent]:
@@ -261,16 +270,23 @@ class GeminiReader:
         body = {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
                 "generationConfig": {"temperature": 0, "responseMimeType": "application/json", "responseSchema": _SCHEMA}}
         # free tier: 429 (quota) and 503 (high demand) are common, so back off briefly, then try the next model
+        r, last_exc = None, None
         for model in self.models:
             for attempt in range(2):
-                r = self.client.post(f"{self.base_url}/models/{model}:generateContent",
-                                     headers={"x-goog-api-key": self.api_key}, json=body)
+                try:
+                    r = self.client.post(f"{self.base_url}/models/{model}:generateContent",
+                                         headers={"x-goog-api-key": self.api_key}, json=body)
+                except httpx.TimeoutException as e:      # a slow model: move on to the next one
+                    r, last_exc = None, e
+                    break
                 if r.status_code not in (429, 500, 503):
                     break
                 time.sleep(2)
-            if r.status_code not in (429, 500, 503):
+            if r is not None and r.status_code not in (429, 500, 503):
                 self.last_model = model
                 break
+        if r is None:
+            raise last_exc
         r.raise_for_status()
         text = r.json()["candidates"][0]["content"]["parts"][0]["text"]
         events = [CommitmentEvent(**e) for e in json.loads(text)]
@@ -293,7 +309,8 @@ class FallbackReader:
             self.last_note, self.last_used = None, self.primary.name
             return out
         except (GroundingError, httpx.HTTPError, KeyError, IndexError, ValueError) as e:
-            self.last_note = f"{self.primary.name} unavailable ({type(e).__name__}); used offline rules"
+            code = getattr(getattr(e, "response", None), "status_code", None)
+            self.last_note = f"{self.primary.name} unavailable ({type(e).__name__}{' ' + str(code) if code else ''}); used offline rules"
             self.last_used = self.fallback.name
             return self.fallback.extract(messages, ctx)
 

@@ -60,7 +60,7 @@ async function init() {
   ["#paste", "#cfgItem", "#cfgMoq", "#cfgTiers"].forEach((s) => $(s).addEventListener("input", updateReadButton));
   $("#btnRead").onclick = () => act($("#btnRead"), readerName === "gemini" ? "Gemini is reading the chat…" : "Reading the chat…", readChat);
   $("#btnHolds").onclick = () => act($("#btnHolds"), "Creating PayPal holds…", async () => render(await api("POST", `/api/campaigns/${cid}/holds`)));
-  $("#btnBuyers").onclick = () => act($("#btnBuyers"), "Starting buyers…", async () => render(await api("POST", `/api/campaigns/${cid}/demo-buyers`, {})));
+  $("#btnBuyers").onclick = () => act($("#btnBuyers"), "Starting buyers…", async () => render(await api("POST", `/api/campaigns/${cid}/demo-buyers`, {skip: new URLSearchParams(location.search).getAll("skip")})));
   $("#btnClose").onclick = () => act($("#btnClose"), "Working out the plan…", async () => {
     if (view.stage !== "closed") render(await api("POST", `/api/campaigns/${cid}/close`));
     showSettle();

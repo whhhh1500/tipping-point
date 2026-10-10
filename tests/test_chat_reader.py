@@ -172,3 +172,16 @@ def test_fallback_reader_on_http_error():
     r = FallbackReader(g, StubReader())
     ev = r.extract(parse_whatsapp("10/10/26, 20:04 - Jason Tan: 2 MSW\n"), ReaderContext("x", ["MSW"], {}))
     assert ev and r.last_used == "stub" and "HTTPStatusError" in r.last_note
+
+
+def test_grounding_accepts_sender_name_without_parenthetical():
+    from tipping_point.chat import Message
+    from tipping_point.events import CommitmentEvent, Kind
+    from tipping_point.readers import ReaderContext, ground, GroundingError
+    import pytest
+    msgs = [Message(id=1, sender="Auntie Lin (organiser)", text="add 2 MSW for Uncle Boon", ts=None)]
+    ctx = ReaderContext("Auntie Lin", ["MSW"], {})
+    out = ground([CommitmentEvent(participant="Uncle Boon", added_by="Auntie Lin", source_id=1, kind=Kind.SET, qty=2, variant="MSW")], msgs, ctx)
+    assert out[0].added_by == "Auntie Lin (organiser)"
+    with pytest.raises(GroundingError):   # a different person is still rejected
+        ground([CommitmentEvent(participant="Uncle Boon", added_by="Kelvin", source_id=1, kind=Kind.SET, qty=2, variant="MSW")], msgs, ctx)

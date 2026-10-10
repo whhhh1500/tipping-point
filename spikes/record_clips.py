@@ -2,6 +2,7 @@
 Usage: record_clips.py <base> <act: socks|durian> ; writes video/raw/<act>_*.webm and video/raw/<act>_events.json
 The buyer's-view clip uses PayPal guest card checkout only (never the sandbox wallet login)."""
 import json, os, shutil, subprocess, sys, time
+from urllib.parse import quote
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from playwright.sync_api import sync_playwright
@@ -71,7 +72,9 @@ with sync_playwright() as p:
     ctx = b.new_context(no_viewport=True, locale="en-US")
     ctx.add_init_script(CURSOR)
     page = ctx.new_page()
-    page.goto(base); page.mouse.move(700, 450); time.sleep(2)
+    # DEMO_SKIP: buyers who should never approve in this take (the app's ?skip= demo option), e.g. the durian story
+    skip_q = "&".join("skip=" + quote(n.strip()) for n in os.environ.get("DEMO_SKIP", "").split(",") if n.strip())
+    page.goto(base + ("/?" + skip_q if skip_q else "")); page.mouse.move(700, 450); time.sleep(2)
     out_mp4 = OUT / f"{act}_raw.mp4"
     rec = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "x11grab", "-draw_mouse", "0", "-framerate", "30",
                             "-video_size", "1440x990", "-i", DISPLAY + ".0", "-c:v", "libx264", "-preset", "veryfast",

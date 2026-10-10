@@ -51,7 +51,7 @@ SEGS = [
  (S, t(S, "buyer_view_returned"), t(S, "buyer_view_returned") + 3.2, 1, FULL,
   "…then: <b>held, not charged</b>. They pay only if the group hits the minimum.", None, 0.8),
  (S, t(S, "buyers_start") - 0.5, cross["t"] - 3, 16, FULL,
-  "The rest of the group approves. <span class=dim>Automated for this demo; real buyers tap their link.</span>", "16×", 0),
+  "The remaining buyers approve. <span class=dim>Automated for this demo; real buyers tap their link.</span>", "16×", 0),
  (S, cross["t"] - 3, cross["t"] + 3, 1, zoom(400, 170, 720),
   "<b>Minimum reached.</b> The group tips.", None, 0),
  (S, cross["t"] + 3, tier30["t"] + 2.5, 16, FULL,
@@ -64,8 +64,10 @@ SEGS = [
   "Real PayPal sandbox captures, one per buyer. The unused <b>SGD 9.00 is released automatically</b>. No refunds.", "2×", 0),
  (S, t(S, "settled") + 3.5, t(S, "end") - 0.3, 1, zoom(400, 170, 720),
   "Held SGD 75.00 → charged SGD 66.00 → released SGD 9.00.", None, 1.0),
- ("durian", t("durian", "read_done") + 1.0, t("durian", "buyers_done") + 2, 120, FULL,
-  "A different chat: durian puffs. 17 boxes said yes, but only <b>15 got held</b>: one buyer never approved.", "120×", 0),
+ ("durian", t("durian", "read_done") + 0.5, t("durian", "read_done") + 2.0, 1, FULL,
+  "A different chat: durian puffs, minimum 20 boxes. Read by <b>Gemini</b> again.", None, 0.5),
+ ("durian", t("durian", "read_done") + 2.0, t("durian", "buyers_done") + 2, 60, FULL,
+  "17 boxes said yes, but only <b>15 got held</b>: Ah Seng never approved. <span class=dim>His link is left unapproved on purpose in this demo</span>", "60×", 0),
  ("durian", t("durian", "close_click") - 0.5, t("durian", "approve_click") + 0.3, 1.3, FULL,
   "Missed the minimum by 5 → <b>every hold is voided</b>.", "1.3×", 0),
  ("durian", t("durian", "approve_click") + 0.3, t("durian", "settled") + 1.0, 1, FULL,
@@ -80,6 +82,10 @@ CAP_HTML = """<html><body style="margin:0;background:transparent">
 <div>%s</div></div><style>b{color:#7fe0c0;font-weight:700}.dim{color:#a8b0c0;font-size:26px}</style></body></html>"""
 TAG_HTML = """<html><body style="margin:0;background:transparent"><div style="display:inline-block;padding:10px 20px;border-radius:14px;
 background:rgba(29,36,51,.88);color:#fff;font:800 40px 'Inter','Noto Sans',sans-serif">⏩ %s</div></body></html>"""
+CARD_HTML = """<html><body style="margin:0;width:1920px;height:1080px;background:#1d2433;display:flex;align-items:center;justify-content:center;
+font-family:'Inter','Noto Sans','DejaVu Sans',sans-serif;color:#f5f3ee"><div style="text-align:center">
+<div style="font-size:40px;color:#a8b0c0;letter-spacing:3px;text-transform:uppercase">Scenario 2</div>
+<div style="font-size:84px;font-weight:800;margin-top:16px">The minimum is <span style="color:#f0a37a">missed</span></div></div></body></html>"""
 END_HTML = """<html><body style="margin:0;width:1920px;height:1080px;background:#f4f1ea;display:flex;align-items:center;justify-content:center;
 font-family:'Inter','Noto Sans','DejaVu Sans',sans-serif;color:#1d2433"><div style="text-align:center">
 <div style="font-size:96px;font-weight:800;letter-spacing:-2px"><span style="color:#0f766e">◔</span> Tipping Point</div>
@@ -101,6 +107,7 @@ def render_pngs():
             pg2.locator("div").screenshot(path=str(BUILD / f"tag_{tg.replace('×','x')}.png"), omit_background=True)
         pg3 = b.new_page(viewport={"width": 1920, "height": 1080})
         pg3.set_content(END_HTML); pg3.screenshot(path=str(BUILD / "endcard.png"))
+        pg3.set_content(CARD_HTML); pg3.screenshot(path=str(BUILD / "card_scenario2.png"))
         b.close()
 
 def run(cmd):
@@ -127,6 +134,12 @@ def build_segment(i, s):
 if __name__ == "__main__":
     render_pngs()
     parts = [build_segment(i, s) for i, s in enumerate(SEGS)]
+    def still(png, secs, out):
+        run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-t", str(secs), "-i", str(BUILD / png), "-vf", "fps=30,format=yuv420p",
+             "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-r", "30", str(out)])
+        return out
+    first_durian = next(i for i, s in enumerate(SEGS) if s[0] == "durian")
+    parts.insert(first_durian, still("card_scenario2.png", 1.5, BUILD / "seg_card2.mp4"))
     end = BUILD / "seg_end.mp4"
     run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-t", "7", "-i", str(BUILD / "endcard.png"), "-vf", "fps=30,format=yuv420p",
          "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-r", "30", str(end)])
