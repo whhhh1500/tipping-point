@@ -39,7 +39,7 @@ SEGS = [
  (S, t(S, "bubbles_start") - 0.3, t(S, "read_done") + 1.0, 1, FULL,
   "Each message becomes an order, a change, a cancel or a flag, and each one is <b>checked against the chat</b> before it counts.", None, 0),
  (S, t(S, "read_done") + 1.0, t(S, "read_done") + 1.8, 1, zoom(10, 440, 640),
-  "<b>“oops make it 2 L only”</b> → 2 L &nbsp;·&nbsp; <b>“the M one cancel, S keep”</b> → cancel M &nbsp;·&nbsp; <b>“add 4 L for Mrs Chan”</b> → ordered on her behalf", None, 2.6),
+  "<b>“oops make it 2 L only”</b> → 2 L &nbsp;·&nbsp; <b>“the M one cancel, S keep”</b> → cancel M<br><b>“add 4 L for Mrs Chan”</b> → ordered on her behalf", None, 4.6),
  (S, t(S, "read_done") + 1.8, t(S, "read_done") + 2.6, 1, zoom(1040, 170, 400),
   "Anything unclear is flagged, with a reply drafted for the organiser.", None, 2.0),
  (S, t(S, "read_done") + 2.6, t(S, "holds_click") - 0.6, 1, zoom(400, 170, 720),
@@ -67,7 +67,7 @@ SEGS = [
  ("durian", t("durian", "read_done") + 0.5, t("durian", "read_done") + 2.0, 1, FULL,
   "A different chat: durian puffs, minimum 20 boxes. Read by <b>Gemini</b> again.", None, 0.5),
  ("durian", t("durian", "read_done") + 2.0, t("durian", "buyers_done") + 2, 60, FULL,
-  "17 boxes said yes, but only <b>15 got held</b>: Ah Seng never approved. <span class=dim>His link is left unapproved on purpose in this demo</span>", "60×", 0),
+  "17 boxes said yes, but only <b>15 got held</b>: Ah Seng never approved.<br><span class=dim>His link is left unapproved on purpose in this demo</span>", "60×", 0),
  ("durian", t("durian", "close_click") - 0.5, t("durian", "approve_click") + 0.3, 1.3, FULL,
   "Missed the minimum by 5 → <b>every hold is voided</b>.", "1.3×", 0),
  ("durian", t("durian", "approve_click") + 0.3, t("durian", "settled") + 1.0, 1, FULL,
@@ -94,19 +94,22 @@ font-family:'Inter','Noto Sans','DejaVu Sans',sans-serif;color:#1d2433"><div sty
 Chat → orders by <b>Gemini</b>, every event checked against the chat · organiser approves the exact plan<br>
 <span style="color:#6b7280">PayPal Sandbox · test money · <b style="color:#1d2433">github.com/whhhh1500/tipping-point</b> · PayPal AI Hackathon</span></div></div></body></html>"""
 
+ARROW = '<span style="font-family:\'DejaVu Sans\';font-weight:700;color:#0f766e;padding:0 .12em">→</span>'
+CAP_ARROW = '<span style="font-family:\'DejaVu Sans\';font-weight:700;color:#7fe0c0;padding:0 .12em">→</span>'
+
 def render_pngs():
     with sync_playwright() as p:
         b = p.chromium.launch(channel="chrome", headless=True)
         pg = b.new_page(viewport={"width": 1920, "height": 120})
         for i, s in enumerate(SEGS):
-            pg.set_content(CAP_HTML % s[5]); pg.screenshot(path=str(BUILD / f"cap{i:02d}.png"), omit_background=True)
+            pg.set_content(CAP_HTML % s[5].replace("→", CAP_ARROW)); pg.screenshot(path=str(BUILD / f"cap{i:02d}.png"), omit_background=True)
         tags = {s[6] for s in SEGS if s[6]}
         pg2 = b.new_page(viewport={"width": 400, "height": 90})
         for tg in tags:
             pg2.set_content(TAG_HTML % tg)
             pg2.locator("div").screenshot(path=str(BUILD / f"tag_{tg.replace('×','x')}.png"), omit_background=True)
         pg3 = b.new_page(viewport={"width": 1920, "height": 1080})
-        pg3.set_content(END_HTML); pg3.screenshot(path=str(BUILD / "endcard.png"))
+        pg3.set_content(END_HTML.replace("→", ARROW)); pg3.screenshot(path=str(BUILD / "endcard.png"))
         pg3.set_content(CARD_HTML); pg3.screenshot(path=str(BUILD / "card_scenario2.png"))
         b.close()
 
